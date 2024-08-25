@@ -9,10 +9,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
     // Load route files
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        web: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
-        health: '/up'
+        web: __DIR__.'/../routes/web.php',       // Route pour les pages web
+        api: __DIR__.'/../routes/api.php',       // Route pour l'API (changement du nom de l'argument)
+        commands: __DIR__.'/../routes/console.php',  // Commandes de console
+        health: '/up'    // Vérification de santé de l'application
     )
 
     // Register middleware configuration

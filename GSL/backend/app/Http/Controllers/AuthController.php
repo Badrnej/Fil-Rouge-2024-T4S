@@ -10,43 +10,54 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    // Enregistrement d'un nouvel utilisateur
-    public function register(Request $request)
+    public function __construct()
+    {
+        // $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function login(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|email',
+            'password' => 'required|string|min:6',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+            return response()->json($validator->errors(), 422);
         }
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        if (! $token = auth()->attempt($validator->validated())) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->createNewToken($token);
+    }
+
+    public function register(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'username' => 'required|string|between:2,100|unique:users',
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|confirmed|min:6',
+            'full_name' => 'required|string|between:2,100',
+            'role_id' => 'required|exists:roles,id',
         ]);
 
-        $token = JWTAuth::fromUser($user);
-
-        return response()->json(['token' => $token], 201);
-    }
-
-    // Connexion d'un utilisateur existant
-    public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password');
-
-        if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Invalid credentials'], 401);
+        if($validator->fails()){
+            return response()->json($validator->errors()->toJson(), 400);
         }
 
-        return response()->json(['token' => $token], 200);
+        $user = User::create(array_merge(
+            $validator->validated(),
+            ['password' => bcrypt($request->password)]
+        ));
+
+        return response()->json([
+            'message' => 'User successfully registered',
+            'user' => $user
+        ], 201);
     }
 
-    // Déconnexion de l'utilisateur
     public function logout()
     {
         auth()->logout();
@@ -54,9 +65,23 @@ class AuthController extends Controller
         return response()->json(['message' => 'User successfully signed out']);
     }
 
-    // Récupérer les informations de l'utilisateur authentifié
-    public function getUser()
+    public function refresh()
+    {
+        return $this->createNewToken(auth()->refresh());
+    }
+
+    public function userProfile()
     {
         return response()->json(auth()->user());
+    }
+
+    protected function createNewToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
+            'user' => auth()->user()
+        ]);
     }
 }
