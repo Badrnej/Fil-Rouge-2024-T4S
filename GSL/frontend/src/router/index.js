@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Home from '../views/Home.vue'
-import Login from '../views/Login.vue'
-import Dashboard from '../views/Dashboard.vue'
+import Home from '../views/HomePage.vue'
+import Login from '../components/Login.vue'
+import Dashboard from '../components/LogisticsDashboard.vue'
 import UserManagement from '../views/UserManagement.vue'
 import OrderTracking from '../views/OrderTracking.vue'
 import PackageManagement from '../views/PackageManagement.vue'
@@ -25,7 +25,7 @@ const routes = [
     path: '/dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    meta: { requiresAuth: true }
+    // meta: { requiresAuth: true }
   },
   {
     path: '/user-management',
