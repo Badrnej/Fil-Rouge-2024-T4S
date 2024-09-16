@@ -2,25 +2,25 @@
   <div class="relative min-h-screen flex items-center justify-center p-4 overflow-hidden">
     <div class="absolute inset-0 z-0">
       <img
-        src="/src/assets/gsl.jpeg"
+        src="../assets/gsl.jpeg"
         alt=""
-        class="w-full h-full object-cover filter blur-lg"
+        class="w-full h-full object-cover blur-sm"
       />
     </div>
     <div class="relative z-10 max-w-4xl w-full bg-white bg-opacity-90 rounded-lg shadow-xl overflow-hidden">
       <div class="flex flex-col items-center">
-        <div class="w-full md:w-48 md:h-48 overflow-hidden">
+        <div class="w-full md:w-48 md:h-48 mt-4 overflow-hidden">
           <img
-            src="#"
+            src="../assets/warehouse.png"
             alt="Logistics operations"
             class="w-full h-48 object-cover"
           />
         </div>
         <div class="p-8 text-center">
-          <div class="uppercase tracking-wide text-sm text-indigo-600 font-semibold">
-            Efficient Stock Management
+          <div class="uppercase tracking-wide text-3xl text-indigo-600 font-semibold">
+            GSL
           </div>
-          <h1 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+          <h1 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-orange-500 sm:text-2xl">
             Streamline Your Logistics
           </h1>
           <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-700">

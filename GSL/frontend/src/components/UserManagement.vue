@@ -13,7 +13,7 @@
             <a href="http://localhost:8085/order-tracking" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Order Tracking</a>
             <a href="http://localhost:8085/package-management" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Package Management</a>
             <a href="http://localhost:8085/inventory" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Inventory</a>
-            <a href="http://localhost:8085/DeliveryServices.vue" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Delivery Services</a>
+            <a href="./DeliveryServices.vue" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Delivery Services</a>
           </template>
           <template v-else-if="userRole === 'glider'">
             <a href="#" class="block py-2 px-4 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700">Package Creation</a>
@@ -59,55 +59,37 @@
 
         <!-- Main content area -->
         <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 dark:bg-gray-900 p-6">
-          <h2 class="text-2xl font-semibold text-gray-800 dark:text-white mb-4">Dashboard</h2>
-          <p class="text-gray-600 dark:text-gray-300">Welcome to your logistics dashboard. Select an option from the sidebar to get started.</p>
-          
-          <!-- Example of a summary section for admins and managers -->
-          <div v-if="userRole === 'admin' || userRole === 'manager'" class="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-              <div class="p-5">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 bg-indigo-500 rounded-md p-3">
-                    <Package class="h-6 w-6 text-white" />
-                  </div>
-                  <div class="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Total Packages</dt>
-                      <dd class="text-lg font-medium text-gray-900 dark:text-white">1,234</dd>
-                    </dl>
-                  </div>
-                </div>
+          <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+            <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+              <div>
+                <h2 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">User Management</h2>
+                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">Manage system users and their permissions.</p>
               </div>
+              <button @click="createUser" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Create User
+              </button>
             </div>
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-              <div class="p-5">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 bg-green-500 rounded-md p-3">
-                    <TrendingUp class="h-6 w-6 text-white" />
+            <div class="border-t border-gray-200 dark:border-gray-700">
+              <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                <li v-for="user in users" :key="user.id" class="px-4 py-4 sm:px-6">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-indigo-600 dark:text-indigo-400 truncate">{{ user.name }}</p>
+                    <div class="ml-2 flex-shrink-0 flex">
+                      <p class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100">
+                        {{ user.role }}
+                      </p>
+                    </div>
                   </div>
-                  <div class="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Deliveries Today</dt>
-                      <dd class="text-lg font-medium text-gray-900 dark:text-white">123</dd>
-                    </dl>
+                  <div class="mt-2 sm:flex sm:justify-between">
+                    <div class="sm:flex">
+                      <p class="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <UserIcon class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400 dark:text-gray-500" />
+                        {{ user.email }}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
-              <div class="p-5">
-                <div class="flex items-center">
-                  <div class="flex-shrink-0 bg-yellow-500 rounded-md p-3">
-                    <Users class="h-6 w-6 text-white" />
-                  </div>
-                  <div class="ml-5 w-0 flex-1">
-                    <dl>
-                      <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">Active Users</dt>
-                      <dd class="text-lg font-medium text-gray-900 dark:text-white">56</dd>
-                    </dl>
-                  </div>
-                </div>
-              </div>
+                </li>
+              </ul>
             </div>
           </div>
         </main>
@@ -118,7 +100,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { Bell, Moon, Package, Search, Sun, TrendingUp, User, Users } from 'lucide-vue-next'
+import { UserIcon, Bell, Moon, Search, Sun, User } from 'lucide-vue-next'
 
 // Mock function to get user role - replace with actual authentication logic
 const getUserRole = () => 'admin'
@@ -135,6 +117,17 @@ const toggleDarkMode = () => {
 const toggleUserMenu = () => {
   showUserMenu.value = !showUserMenu.value
 }
+
+const createUser = () => {
+  // Add logic to create a new user
+  console.log('Creating a new user')
+}
+
+const users = ref([
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Manager' },
+  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'User' },
+])
 </script>
 
 <style>
